@@ -4,6 +4,7 @@
 
 :root {
   --background: #fff;
+  --modal-background: #fff;
   --foreground: #000;
   --border: #000;
   --button-bg: #000;
@@ -11,6 +12,7 @@
 
 .dark {
   --background: #000;
+  --modal-background: #121212;
   --foreground: #fff;
   --border: #575757;
   --button-bg: #fff;
