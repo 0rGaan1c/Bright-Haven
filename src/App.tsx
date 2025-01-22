@@ -1,8 +1,12 @@
+import Header from "./components/layout/Header";
+import Layout from "./components/layout/Layout";
+
 function App() {
   return (
-    <>
-      <p className="text-3xl font-bold underline">Hello</p>
-    </>
+    <div className="">
+      <Header />
+      <Layout />
+    </div>
   );
 }
 
