@@ -40,7 +40,12 @@ export default function Layout() {
               >
                 {section.title}
               </h2>
-              <Edit className="w-4 h-4 cursor-pointer" />
+              <div className="group relative">
+                <Edit className="w-4 h-4 cursor-pointer group" />
+                <span className="absolute top-4 scale-0 rounded bg-modal-background p-2 text-xs text-foreground group-hover:scale-100 w-64 shadow-sm">
+                  Subscribe to premium to rename sections
+                </span>
+              </div>
             </div>
             <TaskList sectionId={section.id} />
           </div>
