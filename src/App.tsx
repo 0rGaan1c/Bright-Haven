@@ -1,15 +1,15 @@
 import Header from "./components/layout/Header";
 import Layout from "./components/layout/Layout";
-import { useTasks } from "./hooks/useTasks";
+import { TaskProvider } from "./contexts/TaskContext";
 
 function App() {
-  const { tasks } = useTasks();
-  console.log(tasks);
   return (
-    <div className="">
-      <Header />
-      <Layout />
-    </div>
+    <TaskProvider>
+      <div className="flex flex-col h-screen">
+        <Header />
+        <Layout />
+      </div>
+    </TaskProvider>
   );
 }
 

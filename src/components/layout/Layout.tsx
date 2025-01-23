@@ -8,12 +8,12 @@ export default function Layout() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground flex-grow overflow-hidden">
       <AddTaskModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
       />
-      <div className="grid grid-cols-2 h-screen border-t border-border relative">
+      <div className="grid grid-cols-2 border-t border-border relative h-full">
         <button
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
                      bg-button-bg rounded-full p-3 hover:scale-110 transition-all"
@@ -27,10 +27,12 @@ export default function Layout() {
         {Object.values(SECTIONS).map((section, index) => (
           <div
             key={section.id}
+            id={section.id}
             className={`p-4 
               ${index % 2 === 1 ? "border-l" : ""} 
               ${index > 1 ? "border-t" : ""} 
               border-border`}
+            style={{ height: "calc(50vh - 40px)" }} // Fixed height, adjust according to header size
           >
             <div className="flex items-center justify-center gap-1">
               <h2
