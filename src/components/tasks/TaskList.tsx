@@ -1,9 +1,12 @@
 import { Circle, Edit, Trash2 } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
+// @ts-expect-error, This checkmark library doesn't provide types but it's only a checkmark and seems safe to use without any types
 import { Checkmark } from "react-checkmark";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
+import { useDeleteConfirmation } from "../../hooks/useDeleteConfirmation";
 import { useTasks } from "../../hooks/useTasks";
 import { SectionId, Task } from "../../types/tasks";
+import { DeleteTaskModal } from "./DeleteTaskModal";
 import { EditTaskModal } from "./EditTaskModal";
 
 interface TaskListProps {
@@ -58,10 +61,22 @@ function getNewSectionId(elementID: string) {
 }
 
 export default function TaskList({ sectionId }: TaskListProps) {
-  const { tasks } = useTasks();
+  const { tasks, deleteTask } = useTasks();
   const sectionTasks = tasks[sectionId];
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState<Task | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const { doNotShowAgain } = useDeleteConfirmation();
+
+  const handleDeleteClick = (task: Task, sectionId: SectionId) => {
+    if (doNotShowAgain) {
+      deleteTask(task.id, sectionId);
+    } else {
+      setTaskToDelete(task);
+      setIsDeleteModalOpen(true);
+    }
+  };
 
   return (
     <div className="space-y-4 mt-4">
@@ -71,12 +86,19 @@ export default function TaskList({ sectionId }: TaskListProps) {
         taskToUpdate={taskToUpdate}
         sectionId={sectionId}
       />
+      <DeleteTaskModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        taskToDelete={taskToDelete}
+        sectionId={sectionId}
+      />
       {sectionTasks.map((task) => (
         <DraggableTask
           sectionId={sectionId}
           task={task}
           setIsEditModalOpen={setIsEditModalOpen}
           setTaskToUpdate={setTaskToUpdate}
+          handleDeleteClick={handleDeleteClick}
         />
       ))}
     </div>
@@ -87,12 +109,14 @@ function DraggableTask({
   sectionId,
   task,
   setIsEditModalOpen,
-  setTaskToUpdate
+  setTaskToUpdate,
+  handleDeleteClick
 }: {
   sectionId: SectionId;
   task: Task;
   setIsEditModalOpen: Dispatch<SetStateAction<boolean>>;
   setTaskToUpdate: Dispatch<SetStateAction<Task | null>>;
+  handleDeleteClick: (task: Task, sectionId: SectionId) => void;
 }) {
   const { updateTask, moveTask } = useTasks();
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -155,7 +179,12 @@ function DraggableTask({
               setTaskToUpdate(task);
             }}
           />
-          <Trash2 className="w-6 h-6 text-red-500 cursor-pointer" />
+          <Trash2
+            className="w-6 h-6 text-red-500 cursor-pointer"
+            onClick={() => {
+              handleDeleteClick(task, sectionId);
+            }}
+          />
         </div>
       </div>
     </Draggable>
