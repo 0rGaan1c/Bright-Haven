@@ -1,7 +1,10 @@
 ## Demo
 
 Click here to watch the demo
-![Watch the demo](demo.mp4)
+
+https://github.com/user-attachments/assets/c00d1ca0-2cd9-47fa-ac79-d892b60b64e9
+
+
 
 ## How to Run
 
